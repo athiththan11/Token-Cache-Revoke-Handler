@@ -4,8 +4,6 @@ Sample handler implementation to revoke the token caches of Gateway component in
 
 > This handler is designed for WSO2 API Manager v2.6.0 (+1612313472144). The handler needs to be engaged and used with the API Manager v2.6.0 with the latest or after WUM timestamp 1612313472144 to work as expected.
 
-[:construction: Dev in progress]
-
 ## How it works?
 
 The provided sample handler will be engaged with `_RevokeAPI_.xml` to revoke the token caches in the Gateway component.
@@ -54,13 +52,21 @@ Configure the Gateway node to publish the data events to the Traffic Manager nod
         <Type>Binary</Type>
         <ReceiverUrlGroup>tcp://traffic-manager:9611</ReceiverUrlGroup>
         <AuthUrlGroup>ssl://traffic-manager:9711</AuthUrlGroup>
-        <Username>${admin.username}</Username>
-        <Password>${admin.password}</Password>
+        <Username>traffic-manager-username</Username>
+        <Password>traffic-manager-password</Password>
     </TrafficManager>
     <DataPublisher>
         <Enabled>true</Enabled>
         ...
     </DataPublisher>
+    <JMSConnectionDetails>
+        <Enabled>true</Enabled>
+        <Destination>throttleData</Destination>
+        <JMSConnectionParameters>
+            ...
+            <connectionfactory.TopicConnectionFactory>amqp://traffic-manager-username:traffic-manager-password@clientid/carbon?brokerlist='tcp://traffic-manager:5672'</connectionfactory.TopicConnectionFactory>
+        </JMSConnectionParameters>
+    </JMSConnectionDetails>
     ...
 </ThrottlingConfigurations>
 ...
